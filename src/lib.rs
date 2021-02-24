@@ -2,52 +2,7 @@ use std::error::Error;
 use std::fs;
 use std::env;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn one_result() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.";
-
-        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
-    }
-
-    #[test]
-    fn case_sensitive() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Duct tape.";
-
-        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
-    }
-
-    #[test]
-    fn case_insensitive() {
-        let query = "rUst";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Trust me.";
-
-        assert_eq!(
-            vec!["Rust:", "Trust me."],
-            search_case_insensitive(query, contents)
-        );
-    }
-}
-
-
-
-
-fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
     let query = query.to_lowercase();
     for line in contents.lines() {
@@ -83,6 +38,7 @@ impl Config {
         }
 
         let mut case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        // make case insensitive if add -i after the initial 2 arguments.
         if args.len() == 4  && args[3] == "-i" {
 
             case_sensitive = false;
