@@ -81,9 +81,16 @@ impl Config {
                 "Needs more arguments: a string to search for and a filename to search in.",
             );
         }
+
+        let mut case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        if args.len() == 4  && args[3] == "-i" {
+
+            case_sensitive = false;
+        }
+
         let query = args[1].clone();
         let filename = args[2].clone();
-        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+        
         
         Ok(Config { 
             query, 
